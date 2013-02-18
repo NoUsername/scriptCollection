@@ -1,0 +1,89 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides: YOURDAEMON
+# Required-Start: $remote_fs $syslog
+# Required-Stop: $remote_fs $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Start YOURDAEMON.
+# Description: Start YOURDAEMON.
+### END INIT INFO
+
+# /etc/init.d/YOURDAEMON
+
+DAEMONNAME=YOURDAEMON
+INITSCRIPTNAME="$DAEMONNAME"
+# enclose one char in [ ] so you don't find the grep command itself when looking through processes
+GREPEXPRESSION=[y]ourdaemon
+# the processes to get the pids from when looking for candidates to stop
+# this is especially useful when your "daemon" is just a script executed by an interpreter-process
+PROCESSTOLIST=python
+DAEMONSTARTCOMMAND="nohup python /usr/local/yourscript > /dev/null 2>&1 &"
+
+USER=root
+HOME=/root
+
+export USER HOME
+
+isDaemonRunning=0
+isRunning() {
+  candidatePids=`pidof $PROCESSTOLIST`
+  isDaemonRunning=0
+  
+  for pid in $candidatePids
+  do
+    ps u -p $pid | grep --quiet $GREPEXPRESSION
+    code=$?
+    if [ "$code" == "0" ]; then
+      # process matches our criteria
+      isDaemonRunning=1
+    fi
+  done
+}
+
+case "$1" in
+start)
+  echo "Starting $DAEMONNAME"
+  isRunning
+  if [ "$isDaemonRunning" == "1" ]; then
+    echo "already running, not starting"
+    exit 1
+  fi
+  
+  $DAEMONSTARTCOMMAND &
+;;
+
+stop)
+  echo "Stopping $DAEMONNAME"
+  candidatePids=`pidof $PROCESSTOLIST`
+  
+  for pid in $candidatePids
+  do
+    ps u -p $pid | grep --quiet $GREPEXPRESSION
+    code=$?
+    if [ "$code" == "0" ]; then
+      # process matches our criteria
+      echo "killing..."
+      kill $pid
+    fi
+  done
+;;
+status)
+  echo "Checking status of $DAEMONNAME"
+  isRunning
+  
+  if [ "$isDaemonRunning" == "1" ]; then
+    echo "running"
+    exit 0
+  else
+    echo "not running"
+    exit 1
+  fi
+;;
+*)
+  echo "Usage: /etc/init.d/$INITSCRIPTNAME {start|stop|status}"
+  exit 1
+;;
+esac
+
+exit 0
