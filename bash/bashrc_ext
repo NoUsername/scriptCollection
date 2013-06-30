@@ -1,0 +1,14 @@
+
+alias ll='ls -la'
+
+# if you accidentally type some windows commands:
+alias cd..='cd ..'
+alias cls='clear'
+alias ipconfig='ifconfig'
+
+
+# if tmux is installed make "tm" an alias for tmux attach
+command -v tmux >/dev/null 2>&1
+if [ "$?" == "0" ]; then
+        alias tm='tmux attach'
+fi

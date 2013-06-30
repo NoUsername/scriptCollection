@@ -1,0 +1,4 @@
+bash/* eol=lf
+conf/* eol=lf
+python/* eol=lf
+batch/* eol=crlf
