@@ -31,7 +31,7 @@ mkdir -p $HOME/scripts
 # copy a script to ~/scripts/ making backups of existing files
 SCRIPTNAME="script.sh"
 copyScriptSafe() {
-	if [ ! -f $HOME/scripts/$SCRIPTNAME ]; then
+	if [ -f $HOME/scripts/$SCRIPTNAME ]; then
 		mv $HOME/scripts/$SCRIPTNAME $HOME/scripts/${SCRIPTNAME}.bak
 	fi
 	cp bash/$SCRIPTNAME $HOME/scripts/
