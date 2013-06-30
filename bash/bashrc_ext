@@ -1,5 +1,7 @@
 
-alias ll='ls -la'
+alias ll='ls -l'
+alias la='ls -la'
+alias l='ls -CF'
 
 # if you accidentally type some windows commands:
 alias cd..='cd ..'
