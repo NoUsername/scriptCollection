@@ -3,6 +3,9 @@ alias ll='ls -l'
 alias la='ls -la'
 alias l='ls -CF'
 
+# show which processes are using the most memory
+alias memoryHogs='ps --sort -rss -eo rss,pid,command | head'
+
 # if you accidentally type some windows commands:
 alias cd..='cd ..'
 alias cls='clear'
@@ -14,3 +17,10 @@ command -v tmux >/dev/null 2>&1
 if [ "$?" == "0" ]; then
         alias tm='tmux attach'
 fi
+
+# if supervisor is installed make "superv" an alias for sudo supervisorctl
+command -v supervisorctl >/dev/null 2>&1
+if [ "$?" == "0" ]; then
+        alias superv='sudo supervisorctl'
+fi
+
